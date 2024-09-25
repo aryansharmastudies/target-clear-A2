@@ -35,6 +35,11 @@ def PlayGame(Targets, NumbersAllowed, TrainingGame, MaxTarget, MaxNumber):
     while not GameOver:
         DisplayState(Targets, NumbersAllowed, Score)
         UserInput = input("Enter an expression: ")
+        split_input = UserInput.split()
+        UserInput = ""
+        for item in split_input:
+            UserInput += item
+        print(f"{UserInput}")
         print()
         if CheckIfUserInputValid(UserInput):
             UserInputInRPN = ConvertToRPN(UserInput)
@@ -52,22 +57,14 @@ def PlayGame(Targets, NumbersAllowed, TrainingGame, MaxTarget, MaxNumber):
     DisplayScore(Score)
 
 def CheckIfUserInputEvaluationIsATarget(Targets, UserInputInRPN, Score):
-    index = 0
-    difference = 0
     UserInputEvaluation = EvaluateRPN(UserInputInRPN)
     UserInputEvaluationIsATarget = False
     if UserInputEvaluation != -1:
         for Count in range(0, len(Targets)):
-            if Targets[Count] - UserInputEvaluation < difference:
-                difference = Targets[Count] - UserInputEvaluation
-                index = Count
-
             if Targets[Count] == UserInputEvaluation:
                 Score += 2
-                Targets[Count] = -1 # just intidicates the target has been eliminated.  on the print screen, '-1' replaced by ' '.
+                Targets[Count] = -1
                 UserInputEvaluationIsATarget = True        
-    print(f"INDEX: {index}")
-    
     return UserInputEvaluationIsATarget, Score
     
 def RemoveNumbersUsed(UserInput, MaxNumber, NumbersAllowed):
@@ -182,8 +179,6 @@ def EvaluateRPN(UserInputInRPN):
             Result = Num1 / Num2
         UserInputInRPN.pop(0)
         S.append(str(Result))       
-    print(f"Result of calculation : {Result}")
-    print()
     if float(S[0]) - math.floor(float(S[0])) == 0.0:
         return math.floor(float(S[0]))
     else:
