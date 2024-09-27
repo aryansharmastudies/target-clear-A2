@@ -1,4 +1,5 @@
-# The symbol ^ is to be used for power and r is to be used for root e.g. 2^3=8 and the opposite 8r3=2
+# After choosing the training or random game, ask the user if they want to type RPN or type infix. 
+# If they choose RPN, no need to convert the formula however spacing will be important because 5122/ this should evaluate 512 / 2 but could easily do 51 and 2/2.
 
 import re
 import random
@@ -12,6 +13,7 @@ def Main():
     MaxNumber = 0
     TrainingGame = False
     Choice = input("Enter y to play the training game, anything else to play a random game: ").lower()
+    Format = input("rpn or infix")
     print()
     if Choice == "y":
         MaxNumber = 1000
@@ -102,7 +104,7 @@ def DisplayState(Targets, NumbersAllowed, Score):
     DisplayScore(Score)    
 
 def DisplayScore(Score):
-    print("(DisplayScore) Current score: " + str(Score))
+    print("Current score: " + str(Score))
     print()
     print()
     
@@ -126,7 +128,7 @@ def DisplayTargets(Targets):
 
 def ConvertToRPN(UserInput):
     Position = 0
-    Precedence = {"+": 2, "-": 2, "*": 4, "/": 4, "^": 6, "r": 6}
+    Precedence = {"+": 2, "-": 2, "*": 4, "/": 4}
     Operators = []
     Operand, Position = GetNumberFromUserInput(UserInput, Position)
     UserInputInRPN = []
@@ -148,13 +150,13 @@ def ConvertToRPN(UserInput):
             while len(Operators) > 0:
                 UserInputInRPN.append(Operators[-1])
                 Operators.pop()
+    print(f"############### {UserInputInRPN}")
     return UserInputInRPN
 
 def EvaluateRPN(UserInputInRPN):
-    print(f"userinputinrpn: {UserInputInRPN}")
     S = []
     while len(UserInputInRPN) > 0:
-        while UserInputInRPN[0] not in ["+", "-", "*", "/", "^", "r"]:
+        while UserInputInRPN[0] not in ["+", "-", "*", "/"]:
             S.append(UserInputInRPN[0])
             UserInputInRPN.pop(0)        
         Num2 = float(S[-1])
@@ -170,13 +172,8 @@ def EvaluateRPN(UserInputInRPN):
             Result = Num1 * Num2
         elif UserInputInRPN[0] == "/":
             Result = Num1 / Num2
-        elif UserInputInRPN[0] == "^":
-            Result = Num1 ** Num2
-        elif UserInputInRPN[0] == "r":
-            Result = Num1 ** (1/Num2)
         UserInputInRPN.pop(0)
         S.append(str(Result))       
-    print(f"Result: {Result}")
     if float(S[0]) - math.floor(float(S[0])) == 0.0:
         return math.floor(float(S[0]))
     else:
@@ -199,7 +196,7 @@ def GetNumberFromUserInput(UserInput, Position):
         return int(Number), Position    
 
 def CheckIfUserInputValid(UserInput):
-    if re.search("^([0-9]+[\\+\\-\\*\\/\\^r])+[0-9]+$", UserInput) is not None:
+    if re.search("^([0-9]+[\\+\\-\\*\\/])+[0-9]+$", UserInput) is not None:
         return True
     else:
         return False
