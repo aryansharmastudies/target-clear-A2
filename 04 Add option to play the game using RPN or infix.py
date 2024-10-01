@@ -14,7 +14,6 @@ def Main():
     TrainingGame = False
     Choice = input("Enter y to play the training game, anything else to play a random game: ").lower()
     Format = input("rpn or infix")
-    print()
     if Choice == "y":
         MaxNumber = 1000
         MaxTarget = 1000
@@ -25,10 +24,10 @@ def Main():
         MaxTarget = 50
         Targets = CreateTargets(MaxNumberOfTargets, MaxTarget)        
     NumbersAllowed = FillNumbers(NumbersAllowed, TrainingGame, MaxNumber)
-    PlayGame(Targets, NumbersAllowed, TrainingGame, MaxTarget, MaxNumber)
+    PlayGame(Targets, NumbersAllowed, TrainingGame, MaxTarget, MaxNumber, Format)
     input()
     
-def PlayGame(Targets, NumbersAllowed, TrainingGame, MaxTarget, MaxNumber):
+def PlayGame(Targets, NumbersAllowed, TrainingGame, MaxTarget, MaxNumber, Format):
     Score = 0
     GameOver = False
     while not GameOver:
